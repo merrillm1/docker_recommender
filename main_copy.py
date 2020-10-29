@@ -5,6 +5,8 @@ import joblib
 from flask import Flask, request
 import sys
 import pandas as pd
+import flasgger
+from flasgger import Swagger 
 
 
 user_to_product_interaction = scipy.sparse.load_npz('/Users/mattmerrill/Springboard/Capstone2/olist_datascience'
@@ -12,9 +14,9 @@ user_to_product_interaction = scipy.sparse.load_npz('/Users/mattmerrill/Springbo
 
 product_to_feature_interaction = scipy.sparse.load_npz('/Users/mattmerrill/Springboard/Capstone2/olist_datascience'
                       								'/exploration/Docker_files/product_to_feature_interaction.npz')                      								
-
+                     								
 user_to_index_mapping = np.load("/Users/mattmerrill/Springboard/Capstone2/olist_datascience"
-                      			"/exploration/Docker_files/user_to_index_mapping.pkl", allow_pickle=True)                     								
+                      			"/exploration/Docker_files/user_to_index_mapping.pkl", allow_pickle=True)
 
 product_to_feature = pd.read_csv('product_to_feature.csv', index_col=0)
 
@@ -91,21 +93,32 @@ class recommendation_sampling:
                       			
 # Initialise a Flask app
 app = Flask(__name__)
+Swagger(app)
 
 # Create an API endpoint
-@app.route('/predict', methods=['GET'])
+@app.route('/predict')
 
 def select_user_and_recommend():
+	"""Let's predict some items for a selected user. 
+	Choose a user from 0 to 91628.
+	---
+	parameters:
+	  - name: user_num
+	    in: query
+	    type: number
+	    required: true
+	responses:
+		200:
+			description: The output values
+	
+	"""
 	
 	user_to_feature_interaction = scipy.sparse.load_npz('/Users/mattmerrill/Springboard/Capstone2/olist_datascience'
                       								'/exploration/Docker_files/user_to_feature_interaction.npz')
-	
-	user_to_index_mapping = np.load("/Users/mattmerrill/Springboard/Capstone2/olist_datascience"
-                      			"/exploration/Docker_files/user_to_index_mapping.pkl", allow_pickle=True)
-                      			
+
 	# user_id_selection = SelectField('User', choices=user_mapping)
 	user_num = request.args.get('user_num')
-    
+	
 	recom = recommendation_sampling(model = lightfm_model)
 	
 	likes = recom.known_likes(user_num)
