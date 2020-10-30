@@ -6,8 +6,7 @@ from flask import Flask, request
 import sys
 import pandas as pd
 import flasgger
-from flasgger import Swagger 
-from lightfm import LightFM
+from flasgger import Swagger
 
 
 user_to_product_interaction = scipy.sparse.load_npz('user_to_product_interaction.npz')
