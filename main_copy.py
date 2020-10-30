@@ -7,26 +7,23 @@ import sys
 import pandas as pd
 import flasgger
 from flasgger import Swagger 
+from lightfm import LightFM
 
 
-user_to_product_interaction = scipy.sparse.load_npz('/Users/mattmerrill/Springboard/Capstone2/olist_datascience'
-                      								'/exploration/Docker_files/user_to_product_interaction.npz')
+user_to_product_interaction = scipy.sparse.load_npz('user_to_product_interaction.npz')
 
-product_to_feature_interaction = scipy.sparse.load_npz('/Users/mattmerrill/Springboard/Capstone2/olist_datascience'
-                      								'/exploration/Docker_files/product_to_feature_interaction.npz')                      								
+product_to_feature_interaction = scipy.sparse.load_npz('product_to_feature_interaction.npz')                      								
                      								
-user_to_index_mapping = np.load("/Users/mattmerrill/Springboard/Capstone2/olist_datascience"
-                      			"/exploration/Docker_files/user_to_index_mapping.pkl", allow_pickle=True)
+user_to_index_mapping = np.load("user_to_index_mapping.pkl", allow_pickle=True)
 
 product_to_feature = pd.read_csv('product_to_feature.csv', index_col=0)
 
 user_mapping = [(k, v) for k, v in user_to_index_mapping.items()]
 
-items = np.load('/Users/mattmerrill/Springboard/Capstone2/olist_datascience'
-                '/exploration/Docker_files/items.npy', allow_pickle=True)                      			
+items = np.load('items.npy', allow_pickle=True)                      			
           
 # light_fm model         
-filename = '/Users/mattmerrill/Springboard/Capstone2/olist_datascience/exploration/Docker_files/lightfm_model.pkl'
+filename = 'lightfm_model.pkl'
 
 lightfm_model = joblib.load(filename, mmap_mode=None)
 
@@ -113,8 +110,7 @@ def select_user_and_recommend():
 	
 	"""
 	
-	user_to_feature_interaction = scipy.sparse.load_npz('/Users/mattmerrill/Springboard/Capstone2/olist_datascience'
-                      								'/exploration/Docker_files/user_to_feature_interaction.npz')
+	user_to_feature_interaction = scipy.sparse.load_npz('user_to_feature_interaction.npz')
 
 	# user_id_selection = SelectField('User', choices=user_mapping)
 	user_num = request.args.get('user_num')
